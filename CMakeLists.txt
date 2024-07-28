@@ -23,6 +23,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(compareXL
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET compareXL APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -42,7 +43,19 @@ else()
     endif()
 endif()
 
-target_link_libraries(compareXL PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# Add the include directories for libxl
+include_directories(/Users/aayush/Desktop/QtProjects/compareXL/libxl/include)
+
+# Link the libxl library
+if(WIN32)
+    set(LIBXL_LIBRARY /path/to/libxl/lib/libxl.lib)
+else()
+    set(LIBXL_LIBRARY /Users/aayush/Desktop/QtProjects/compareXL/lib/libxl.dylib)  # For macOS
+    # or
+    # set(LIBXL_LIBRARY /path/to/libxl/lib/libxl.so)  # For Linux
+endif()
+
+target_link_libraries(compareXL PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${LIBXL_LIBRARY})
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
